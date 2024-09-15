@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video List</title>
+  </head>
+  <body>
+    <h1>Uploaded Videos</h1>
+    <ul>
+      {% for video in videos %}
+      <li><a href="{% url 'video_detail' video.id %}">{{ video.title }}</a></li>
+      {% endfor %}
+    </ul>
+
+    <h2>Upload New Video</h2>
+    <form id="upload-form" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="text" name="title" placeholder="Video Title" required />
+      <input type="file" name="video" accept="video/*" required />
+      <button type="submit">Upload</button>
+    </form>
+
+    <script>
+      document
+        .getElementById("upload-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          var formData = new FormData(this);
+          fetch("{% url 'video_upload' %}", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.status === "success") {
+                alert("Video uploaded successfully!");
+                location.reload();
+              } else {
+                alert("Error uploading video.");
+              }
+            });
+        });
+    </script>
+  </body>
+</html>

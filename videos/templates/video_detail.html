@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ video.title }}</title>
+</head>
+<body>
+    <h1>{{ video.title }}</h1>
+    <video id="video-player" controls>
+        <source src="{{ video.file.url }}" type="video/mp4">
+        {% for subtitle in subtitles %}
+            <track kind="subtitles" src="{{ subtitle.content }}" srclang="{{ subtitle.language }}" label="{{ subtitle.language }}">
+        {% endfor %}
+    </video>
+
+    <h2>Search Subtitles</h2>
+    <input type="text" id="search-input" placeholder="Search for a phrase...">
+    <button onclick="searchSubtitles()">Search</button>
+
+    <div id="search-results"></div>
+
+    <script src="{% static 'js/video_player.js' %}"></script>
+</body>
+</html>
